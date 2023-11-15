@@ -19,6 +19,9 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "timer.h"
+#include "input_reading.h"
+#include "traffic_light_control.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -89,13 +92,27 @@ int main(void)
   MX_GPIO_Init();
   MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
-
+  HAL_TIM_Base_Start_IT(&htim2);
+  initTimer();
+  initButton();
+  activeTrafficLight();
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+    if(timer_flag[3] == 1){
+      setTimer(3, BUTTON_READING_TIME);
+      buttonReading();
+    }
+    if(timer_flag[1] == 1){
+      setTimer(1, SCAN_7SEG_TIME);
+      update7Seg(seven_segment_index++);
+      if(seven_segment_index >= SEVEN_SEGMENT_NUMBER)
+	seven_segment_index = 0;
+    }
+    controlTrafficLight();
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -203,7 +220,8 @@ static void MX_GPIO_Init(void)
                           |LED_AMBER_X_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, EN_7SEG_X0_Pin|EN_7SEG_X1_Pin|EN_7SEG_Y0_Pin|EN_7SEG_Y1_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, EN_TL_Pin|EN_7SEG_X0_Pin|EN_7SEG_X1_Pin|EN_7SEG_Y0_Pin
+                          |EN_7SEG_Y1_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pins : BUTTON1_Pin BUTTON2_Pin BUTTON3_Pin */
   GPIO_InitStruct.Pin = BUTTON1_Pin|BUTTON2_Pin|BUTTON3_Pin;
@@ -224,8 +242,10 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : EN_7SEG_X0_Pin EN_7SEG_X1_Pin EN_7SEG_Y0_Pin EN_7SEG_Y1_Pin */
-  GPIO_InitStruct.Pin = EN_7SEG_X0_Pin|EN_7SEG_X1_Pin|EN_7SEG_Y0_Pin|EN_7SEG_Y1_Pin;
+  /*Configure GPIO pins : EN_TL_Pin EN_7SEG_X0_Pin EN_7SEG_X1_Pin EN_7SEG_Y0_Pin
+                           EN_7SEG_Y1_Pin */
+  GPIO_InitStruct.Pin = EN_TL_Pin|EN_7SEG_X0_Pin|EN_7SEG_X1_Pin|EN_7SEG_Y0_Pin
+                          |EN_7SEG_Y1_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;

@@ -1,0 +1,3 @@
+traffic_light_display.c:12:6:displayTrafficLight	8	static
+traffic_light_display.c:82:6:activeTrafficLight	8	static
+traffic_light_display.c:85:6:toggleTrafficLight	8	static

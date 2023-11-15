@@ -18,11 +18,14 @@ typedef enum
   XAMBER_YRED = 3,
   ARED = 4,
   AAMBER = 5,
-  AGREEN = 6
-} TrafficLightState;
+  AGREEN = 6,
+  AALL = 7,
+} TrafficLightDisplayState;
 
-TrafficLightState traffic_light_state = XRED_YGREEN;
+extern TrafficLightDisplayState traffic_light_display_state;
 
-void display_traffic_light();
+void displayTrafficLight();
+void activeTrafficLight();
+void toggleTrafficLight();
 
 #endif /* INC_TRAFFIC_LIGHT_DISPLAY_H_ */
