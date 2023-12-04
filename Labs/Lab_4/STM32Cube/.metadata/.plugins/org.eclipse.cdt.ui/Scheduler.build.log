@@ -1,0 +1,23 @@
+20:27:16 **** Incremental Build of configuration Debug for project Scheduler ****
+make -j8 all 
+arm-none-eabi-gcc "../Core/Src/scheduler.c" -mcpu=cortex-m3 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32F103x6 -c -I../Core/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc -I../Drivers/STM32F1xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32F1xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -MMD -MP -MF"Core/Src/scheduler.d" -MT"Core/Src/scheduler.o" --specs=nano.specs -mfloat-abi=soft -mthumb -o "Core/Src/scheduler.o"
+arm-none-eabi-gcc -o "Scheduler.elf" @"objects.list"   -mcpu=cortex-m3 -T"C:\Users\PC\OneDrive\Desktop\Nguyen\HK05\Microprocessors-Microcontrollers\Labs\Lab_4\STM32Cube\Scheduler\STM32F103C6UX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Scheduler.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Finished building target: Scheduler.elf
+ 
+arm-none-eabi-size   Scheduler.elf 
+arm-none-eabi-objdump -h -S  Scheduler.elf  > "Scheduler.list"
+arm-none-eabi-objcopy  -O ihex  Scheduler.elf  "Scheduler.hex"
+   text	   data	    bss	    dec	    hex	filename
+   7828	     20	   1844	   9692	   25dc	Scheduler.elf
+arm-none-eabi-objcopy  -O binary  Scheduler.elf  "Scheduler.bin"
+Finished building: default.size.stdout
+ 
+Finished building: Scheduler.hex
+Finished building: Scheduler.bin
+ 
+ 
+Finished building: Scheduler.list
+ 
+
+20:27:16 Build Finished. 0 errors, 0 warnings. (took 678ms)
+
