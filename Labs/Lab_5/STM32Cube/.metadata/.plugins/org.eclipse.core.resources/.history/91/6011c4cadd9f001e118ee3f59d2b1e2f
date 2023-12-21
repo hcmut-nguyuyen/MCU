@@ -1,0 +1,64 @@
+/*
+ * command_parser.c
+ *
+ *  Created on: Dec 21, 2023
+ *      Author: Nguyuyen
+ */
+
+#include "command_parser.h"
+
+void command_parser_fsm() {
+  if (command_flag == 0) {
+    HAL_UART_Transmit(&huart2, (void *)str, sprintf(str, "FTO buffer: <%c>\r\n", buffer[index_buffer]), 1000);
+    switch (command_state) {
+      case COMMAND_INIT:
+	if(buffer[index_buffer] == '!')
+	  command_state = COMMAND_BEGIN;
+	break;
+      case COMMAND_BEGIN:
+	command_state = (buffer[index_buffer] == 'R') ? COMMAND_1_R :
+			(buffer[index_buffer] == 'O') ? COMMAND_1_O :
+							COMMAND_INIT;
+	break;
+      case COMMAND_1_R:
+	command_state = (buffer[index_buffer] == 'S') ? COMMAND_2_S :
+							COMMAND_INIT;
+	break;
+      case COMMAND_2_S:
+	command_state = (buffer[index_buffer] == 'T') ? COMMAND_3_T :
+							COMMAND_INIT;
+	break;
+      case COMMAND_3_T:
+	if(buffer[index_buffer] == '#') {
+	  command_data = COMMAND_RST;
+	  command_flag = 1;
+	  command_state = COMMAND_INIT;
+	}
+	else
+	  command_state = COMMAND_INIT;
+	break;
+      case COMMAND_1_O:
+	command_state = (buffer[index_buffer] == 'K') ? COMMAND_2_K :
+							COMMAND_INIT;
+	break;
+      case COMMAND_2_K:
+	if(buffer[index_buffer] == '#') {
+	  command_data = COMMAND_OK;
+	  command_flag = 1;
+	  command_state = COMMAND_INIT;
+	}
+	else
+	  command_state = COMMAND_INIT;
+	break;
+      case COMMAND_END:
+//	command_flag = 1;
+	command_state = COMMAND_INIT;
+	break;
+      default:
+	command_state = COMMAND_INIT;
+	break;
+    }
+  } else {
+    HAL_UART_Transmit(&huart2, (void *)str, sprintf(str, "FTO: in process\r\n"), 1000);
+  }
+}

@@ -1,0 +1,30 @@
+/*
+ * uart_communication.h
+ *
+ *  Created on: Dec 21, 2023
+ *      Author: Nguyuyen
+ */
+
+#ifndef INC_UART_COMMUNICATION_H_
+#define INC_UART_COMMUNICATION_H_
+
+#include "main.h"
+
+#define MAX_BUFFER_SIZE 30
+extern uint8_t temp = 0;
+extern uint8_t buffer[MAX_BUFFER_SIZE];
+extern uint8_t index_buffer;
+
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+
+typedef enum {
+  UART_INIT = 0,
+  UART_RESPONSE,
+  UART_STOP
+} UARTCommunicationState;
+
+extern UARTCommunicationState uart_communication_state;
+
+void uart_communication_fsm();
+
+#endif /* INC_UART_COMMUNICATION_H_ */

@@ -1,0 +1,28 @@
+/*
+ * timer.h
+ *
+ *  Created on: Dec 21, 2023
+ *      Author: Nguyuyen
+ */
+
+#ifndef INC_TIMER_H_
+#define INC_TIMER_H_
+
+#include "main.h"
+
+#define TIME_CYCLE 10
+#define BLINK_LED_TIME 500
+#define RESPONSE_CYCLE 3000
+
+int timer_response_counter = 0;
+int timer_response_flag = 0;
+
+int timer_blink_counter = 0;
+int timer_blink_flag = 0;
+
+void setTimer1(int duration);
+void runTimer1();
+void setTimerBlink(int duration);
+void runTimerBlink();
+
+#endif /* INC_TIMER_H_ */
